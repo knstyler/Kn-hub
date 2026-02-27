@@ -1,4 +1,4 @@
--- KN HUB
+-- KN HUB v3
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -9,145 +9,144 @@ local Camera = workspace.CurrentCamera
 local IsMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
 -- Configs
-local Aimbot = {Enabled = false, Smooth = 1.0, FOV = 250, WallCheck = true, TeamCheck = true, Target = "Head"}
-local ESP = {Enabled = false, Boxes = true, Names = true, Health = true, Color = Color3.fromRGB(255, 80, 80)}
-local Theme = Color3.fromRGB(0, 170, 255)
+local Aimbot = {Enabled = false, Smooth = 1, FOV = 250, WallCheck = true, TeamCheck = true}
+local ESP = {Enabled = false, Boxes = true, Names = true, Health = true, Distance = true, Color = Color3.fromRGB(255, 70, 70)}
+local Theme = Color3.fromRGB(0, 150, 255)
 
 -- UI
 local Gui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
 Gui.ResetOnSpawn = false
 
 local Btn = Instance.new("TextButton", Gui)
-Btn.Size = IsMobile and UDim2.new(0, 50, 0, 50) or UDim2.new(0, 40, 0, 40)
-Btn.Position = UDim2.new(0, 10, 0, 10)
+Btn.Size = IsMobile and UDim2.new(0, 45, 0, 45) or UDim2.new(0, 38, 0, 38)
+Btn.Position = UDim2.new(0, 12, 0, 12)
 Btn.BackgroundColor3 = Theme
 Btn.Text = "KN"
 Btn.TextColor3 = Color3.new(1, 1, 1)
 Btn.Font = Enum.Font.GothamBold
-Btn.TextSize = IsMobile and 16 or 14
-Instance.new("UICorner", Btn).CornerRadius = UDim.new(1, 0)
+Btn.TextSize = 14
+Instance.new("UICorner", Btn).CornerRadius = UDim.new(0.3, 0)
 
 local Menu = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
 Menu.Enabled = false
 Menu.ResetOnSpawn = false
 
 local Frame = Instance.new("Frame", Menu)
-Frame.Size = UDim2.new(0, 300, 0, 200)
-Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.Size = UDim2.new(0, 320, 0, 280)
+Frame.Position = UDim2.new(0.5, -160, 0.5, -140)
+Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 Frame.BorderSizePixel = 0
 Frame.Active = true
-Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 6)
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 8)
+
+local Shadow = Instance.new("ImageLabel", Frame)
+Shadow.Size = UDim2.new(1, 30, 1, 30)
+Shadow.Position = UDim2.new(0, -15, 0, -15)
+Shadow.BackgroundTransparency = 1
+Shadow.Image = "rbxassetid://1316045217"
+Shadow.ImageColor3 = Color3.new(0, 0, 0)
+Shadow.ImageTransparency = 0.6
 
 local Title = Instance.new("Frame", Frame)
-Title.Size = UDim2.new(1, 0, 0, 32)
-Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Instance.new("UICorner", Title).CornerRadius = UDim.new(0, 6)
+Title.Size = UDim2.new(1, 0, 0, 36)
+Title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Instance.new("UICorner", Title).CornerRadius = UDim.new(0, 8)
 Instance.new("Frame", Title).Size = UDim2.new(1, 0, 0.5, 0)
 Instance.new("Frame", Title).Position = UDim2.new(0, 0, 0.5, 0)
-Instance.new("Frame", Title).BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Instance.new("Frame", Title).BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 
-local TitleText = Instance.new("TextLabel", Title)
-TitleText.Text = "KN HUB"
-TitleText.Size = UDim2.new(1, -50, 1, 0)
-TitleText.Position = UDim2.new(0, 10, 0, 0)
-TitleText.BackgroundTransparency = 1
-TitleText.TextColor3 = Theme
-TitleText.Font = Enum.Font.GothamBold
-TitleText.TextSize = 13
-TitleText.TextXAlignment = Enum.TextXAlignment.Left
+Instance.new("TextLabel", Title).Text = "KN HUB"
+Instance.new("TextLabel", Title).Size = UDim2.new(1, -50, 1, 0)
+Instance.new("TextLabel", Title).Position = UDim2.new(0, 12, 0, 0)
+Instance.new("TextLabel", Title).BackgroundTransparency = 1
+Instance.new("TextLabel", Title).TextColor3 = Theme
+Instance.new("TextLabel", Title).Font = Enum.Font.GothamBold
+Instance.new("TextLabel", Title).TextSize = 14
+Instance.new("TextLabel", Title).TextXAlignment = Enum.TextXAlignment.Left
 
 local Close = Instance.new("TextButton", Title)
-Close.Size = UDim2.new(0, 22, 0, 22)
-Close.Position = UDim2.new(1, -28, 0.5, -11)
-Close.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+Close.Size = UDim2.new(0, 24, 0, 24)
+Close.Position = UDim2.new(1, -32, 0.5, -12)
+Close.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
 Close.Text = "×"
 Close.TextColor3 = Color3.new(1, 1, 1)
 Close.Font = Enum.Font.GothamBold
-Close.TextSize = 14
-Instance.new("UICorner", Close).CornerRadius = UDim.new(0, 4)
+Close.TextSize = 16
+Instance.new("UICorner", Close).CornerRadius = UDim.new(0.3, 0)
 
-local Content = Instance.new("Frame", Frame)
-Content.Size = UDim2.new(1, -10, 1, -38)
-Content.Position = UDim2.new(0, 5, 0, 33)
-Content.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 4)
-
-local Scroll = Instance.new("ScrollingFrame", Content)
-Scroll.Size = UDim2.new(1, -10, 1, -10)
-Scroll.Position = UDim2.new(0, 5, 0, 5)
-Scroll.BackgroundTransparency = 1
-Scroll.ScrollBarThickness = 4
-Scroll.ScrollBarImageColor3 = Theme
-Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-Instance.new("UIListLayout", Scroll).Padding = UDim.new(0, 5)
+local Content = Instance.new("ScrollingFrame", Frame)
+Content.Size = UDim2.new(1, -16, 1, -48)
+Content.Position = UDim2.new(0, 8, 0, 40)
+Content.BackgroundTransparency = 1
+Content.ScrollBarThickness = 3
+Content.ScrollBarImageColor3 = Theme
+Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Instance.new("UIListLayout", Content).Padding = UDim.new(0, 6)
 
 -- Toggle
 local function Toggle(text, default, callback)
-	local f = Instance.new("Frame", Scroll)
-	f.Size = UDim2.new(1, 0, 0, 36)
-	f.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 3)
+	local f = Instance.new("Frame", Content)
+	f.Size = UDim2.new(1, 0, 0, 38)
+	f.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 6)
 	
-	local l = Instance.new("TextLabel", f)
-	l.Text = text
-	l.Size = UDim2.new(1, -60, 1, 0)
-	l.Position = UDim2.new(0, 10, 0, 0)
-	l.BackgroundTransparency = 1
-	l.TextColor3 = Color3.new(1, 1, 1)
-	l.Font = Enum.Font.Gotham
-	l.TextSize = 12
-	l.TextXAlignment = Enum.TextXAlignment.Left
+	Instance.new("TextLabel", f).Text = text
+	Instance.new("TextLabel", f).Size = UDim2.new(1, -70, 1, 0)
+	Instance.new("TextLabel", f).Position = UDim2.new(0, 12, 0, 0)
+	Instance.new("TextLabel", f).BackgroundTransparency = 1
+	Instance.new("TextLabel", f).TextColor3 = Color3.new(1, 1, 1)
+	Instance.new("TextLabel", f).Font = Enum.Font.Gotham
+	Instance.new("TextLabel", f).TextSize = 12
+	Instance.new("TextLabel", f).TextXAlignment = Enum.TextXAlignment.Left
 	
 	local b = Instance.new("TextButton", f)
-	b.Size = UDim2.new(0, 40, 0, 20)
-	b.Position = UDim2.new(1, -50, 0.5, -10)
-	b.BackgroundColor3 = default and Theme or Color3.fromRGB(50, 50, 50)
+	b.Size = UDim2.new(0, 44, 0, 22)
+	b.Position = UDim2.new(1, -56, 0.5, -11)
+	b.BackgroundColor3 = default and Theme or Color3.fromRGB(60, 60, 60)
 	b.Text = default and "ON" or "OFF"
 	b.TextColor3 = Color3.new(1, 1, 1)
 	b.Font = Enum.Font.GothamBold
 	b.TextSize = 10
 	b.AutoButtonColor = false
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 3)
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 4)
 	
 	local state = default
 	b.MouseButton1Click:Connect(function()
 		state = not state
 		callback(state)
 		b.Text = state and "ON" or "OFF"
-		TweenService:Create(b, TweenInfo.new(.15), {BackgroundColor3 = state and Theme or Color3.fromRGB(50, 50, 50)}):Play()
+		TweenService:Create(b, TweenInfo.new(0.15), {BackgroundColor3 = state and Theme or Color3.fromRGB(60, 60, 60)}):Play()
 	end)
 end
 
 -- Slider
 local function Slider(text, min, max, default, suffix, callback)
-	local f = Instance.new("Frame", Scroll)
-	f.Size = UDim2.new(1, 0, 0, 48)
-	f.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 3)
+	local f = Instance.new("Frame", Content)
+	f.Size = UDim2.new(1, 0, 0, 50)
+	f.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 6)
 	
-	local l = Instance.new("TextLabel", f)
-	l.Text = text
-	l.Size = UDim2.new(1, -55, 0, 18)
-	l.Position = UDim2.new(0, 10, 0, 5)
-	l.BackgroundTransparency = 1
-	l.TextColor3 = Color3.new(1, 1, 1)
-	l.Font = Enum.Font.Gotham
-	l.TextSize = 11
+	Instance.new("TextLabel", f).Text = text
+	Instance.new("TextLabel", f).Size = UDim2.new(1, -60, 0, 20)
+	Instance.new("TextLabel", f).Position = UDim2.new(0, 12, 0, 6)
+	Instance.new("TextLabel", f).BackgroundTransparency = 1
+	Instance.new("TextLabel", f).TextColor3 = Color3.new(1, 1, 1)
+	Instance.new("TextLabel", f).Font = Enum.Font.Gotham
+	Instance.new("TextLabel", f).TextSize = 11
 	
 	local v = Instance.new("TextLabel", f)
 	v.Text = tostring(default) .. suffix
-	v.Size = UDim2.new(0, 45, 0, 18)
-	v.Position = UDim2.new(1, -50, 0, 5)
+	v.Size = UDim2.new(0, 50, 0, 20)
+	v.Position = UDim2.new(1, -58, 0, 6)
 	v.BackgroundTransparency = 1
 	v.TextColor3 = Theme
 	v.Font = Enum.Font.GothamBold
 	v.TextSize = 11
 	
 	local r = Instance.new("Frame", f)
-	r.Size = UDim2.new(1, -20, 0, 4)
-	r.Position = UDim2.new(0, 10, 1, -12)
-	r.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	r.Size = UDim2.new(1, -24, 0, 4)
+	r.Position = UDim2.new(0, 12, 1, -14)
+	r.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	Instance.new("UICorner", r).CornerRadius = UDim.new(1, 0)
 	
 	local fl = Instance.new("Frame", r)
@@ -156,17 +155,17 @@ local function Slider(text, min, max, default, suffix, callback)
 	Instance.new("UICorner", fl).CornerRadius = UDim.new(1, 0)
 	
 	local k = Instance.new("Frame", r)
-	k.Size = UDim2.new(0, 10, 0, 10)
-	k.Position = UDim2.new((default - min) / (max - min), -5, 0.5, -5)
+	k.Size = UDim2.new(0, 12, 0, 12)
+	k.Position = UDim2.new((default - min) / (max - min), -6, 0.5, -6)
 	k.BackgroundColor3 = Color3.new(1, 1, 1)
 	Instance.new("UICorner", k).CornerRadius = UDim.new(1, 0)
 	
 	local g = false
-	local function u(input)
-		local pos = math.clamp((input.Position.X - r.AbsolutePosition.X) / r.AbsoluteSize.X, 0, 1)
-		local val = math.floor(min + (pos * (max - min)))
-		fl.Size = UDim2.new(pos, 0, 1, 0)
-		k.Position = UDim2.new(pos, -5, 0.5, -5)
+	local function u(i)
+		local p = math.clamp((i.Position.X - r.AbsolutePosition.X) / r.AbsoluteSize.X, 0, 1)
+		local val = math.floor(min + (p * (max - min)))
+		fl.Size = UDim2.new(p, 0, 1, 0)
+		k.Position = UDim2.new(p, -6, 0.5, -6)
 		v.Text = tostring(val) .. suffix
 		callback(val)
 	end
@@ -207,35 +206,55 @@ UserInputService.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserI
 
 -- FOV Circle
 local Circle = Drawing.new("Circle")
-Circle.Transparency = .5
+Circle.Transparency = 0.4
 Circle.Thickness = 2
 Circle.Filled = false
 Circle.NumSides = 64
 
--- ESP
+-- ESP 3D System (Corner Boxes igual da foto)
 local ESPObjects = {}
+
 function SetupESP(p)
 	if p == LocalPlayer then return end
 	ESPObjects[p] = {
-		Box = Drawing.new("Square"),
+		-- 8 linhas para corner box (2D na tela mas baseado em 3D)
+		Lines = {},
 		Name = Drawing.new("Text"),
-		Health = Drawing.new("Square"),
-		HealthBg = Drawing.new("Square")
+		Health = Drawing.new("Text"),
+		Distance = Drawing.new("Text")
 	}
+	
+	-- Criar 8 linhas (4 cantos, 2 linhas cada)
+	for i = 1, 8 do
+		ESPObjects[p].Lines[i] = Drawing.new("Line")
+		ESPObjects[p].Lines[i].Thickness = 1.5
+	end
+	
 	local o = ESPObjects[p]
-	o.Box.Thickness = 1.5
-	o.Box.Filled = false
-	o.Name.Size = 10
+	o.Name.Size = 11
 	o.Name.Center = true
 	o.Name.Outline = true
-	o.Health.Filled = true
-	o.HealthBg.Filled = true
+	o.Name.Font = 2
+	
+	o.Health.Size = 10
+	o.Health.Center = true
+	o.Health.Outline = true
+	
+	o.Distance.Size = 10
+	o.Distance.Center = true
+	o.Distance.Outline = true
 end
 
 for _, p in pairs(Players:GetPlayers()) do SetupESP(p) end
 Players.PlayerAdded:Connect(SetupESP)
 Players.PlayerRemoving:Connect(function(p)
-	if ESPObjects[p] then for _, d in pairs(ESPObjects[p]) do d:Remove() end ESPObjects[p] = nil end
+	if ESPObjects[p] then
+		for i = 1, 8 do ESPObjects[p].Lines[i]:Remove() end
+		ESPObjects[p].Name:Remove()
+		ESPObjects[p].Health:Remove()
+		ESPObjects[p].Distance:Remove()
+		ESPObjects[p] = nil
+	end
 end)
 
 -- Get target
@@ -243,7 +262,7 @@ function GetTarget()
 	local target, dist, center = nil, math.huge, Camera.ViewportSize / 2
 	for _, p in pairs(Players:GetPlayers()) do
 		if p ~= LocalPlayer and p.Character then
-			local hum, head = p.Character:FindFirstChild("Humanoid"), p.Character:FindFirstChild(Aimbot.Target)
+			local hum, head = p.Character:FindFirstChild("Humanoid"), p.Character:FindFirstChild("Head")
 			if hum and hum.Health > 0 and head then
 				if Aimbot.TeamCheck and p.Team == LocalPlayer.Team then continue end
 				local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
@@ -265,13 +284,6 @@ function GetTarget()
 	return target
 end
 
-function Predict(t)
-	local head = t.Character[Aimbot.Target]
-	local vel = t.Character:FindFirstChild("HumanoidRootPart") and t.Character.HumanoidRootPart.Velocity or Vector3.new()
-	local d = (head.Position - Camera.CFrame.Position).Magnitude
-	return head.Position + (vel * math.clamp(d / 100, .1, .5) * .1)
-end
-
 -- Main loop
 RunService.RenderStepped:Connect(function()
 	local target = GetTarget()
@@ -283,54 +295,138 @@ RunService.RenderStepped:Connect(function()
 	Circle.Color = target and Color3.fromRGB(0, 255, 100) or Theme
 	
 	if Aimbot.Enabled and target then
-		Camera.CFrame = CFrame.new(Camera.CFrame.Position, Predict(target))
+		local head = target.Character.Head
+		local vel = target.Character:FindFirstChild("HumanoidRootPart") and target.Character.HumanoidRootPart.Velocity or Vector3.new()
+		local d = (head.Position - Camera.CFrame.Position).Magnitude
+		Camera.CFrame = CFrame.new(Camera.CFrame.Position, head.Position + (vel * math.clamp(d / 100, 0.1, 0.5) * 0.1))
 	end
 	
 	for p, o in pairs(ESPObjects) do
-		if p.Team == LocalPlayer.Team then for _, d in pairs(o) do d.Visible = false end continue end
+		if p.Team == LocalPlayer.Team then 
+			for i = 1, 8 do o.Lines[i].Visible = false end
+			o.Name.Visible = false
+			o.Health.Visible = false
+			o.Distance.Visible = false
+			continue 
+		end
+		
 		if not ESP.Enabled or not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") then
-			for _, d in pairs(o) do d.Visible = false end
+			for i = 1, 8 do o.Lines[i].Visible = false end
+			o.Name.Visible = false
+			o.Health.Visible = false
+			o.Distance.Visible = false
 		else
 			local hrp, head, hum = p.Character.HumanoidRootPart, p.Character:FindFirstChild("Head"), p.Character:FindFirstChild("Humanoid")
 			local torso = p.Character:FindFirstChild("UpperTorso") or p.Character:FindFirstChild("Torso")
-			if not head or not hum or not torso then for _, d in pairs(o) do d.Visible = false end continue end
+			if not head or not hum or not torso then
+				for i = 1, 8 do o.Lines[i].Visible = false end
+				o.Name.Visible = false
+				o.Health.Visible = false
+				o.Distance.Visible = false
+				continue
+			end
 			
-			local top = Camera:WorldToViewportPoint(head.Position + Vector3.new(0, .5, 0))
-			local bottom = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 2.5, 0))
-			local h = math.abs(bottom.Y - top.Y)
-			local w = h * .4
-			local cx = (top.X + bottom.X) / 2
+			-- Calcular cantos 3D
+			local cf = hrp.CFrame
+			local size = Vector3.new(3, 5, 2) -- Tamanho do personagem
+			
+			local corners = {
+				cf * CFrame.new(-size.X/2, size.Y/2, -size.Z/2),  -- Topo esquerdo tras
+				cf * CFrame.new(size.X/2, size.Y/2, -size.Z/2),   -- Topo direito tras
+				cf * CFrame.new(size.X/2, size.Y/2, size.Z/2),    -- Topo direito frente
+				cf * CFrame.new(-size.X/2, size.Y/2, size.Z/2),   -- Topo esquerdo frente
+				cf * CFrame.new(-size.X/2, -size.Y/2, -size.Z/2), -- Baixo esquerdo tras
+				cf * CFrame.new(size.X/2, -size.Y/2, -size.Z/2),  -- Baixo direito tras
+				cf * CFrame.new(size.X/2, -size.Y/2, size.Z/2),   -- Baixo direito frente
+				cf * CFrame.new(-size.X/2, -size.Y/2, size.Z/2)   -- Baixo esquerdo frente
+			}
+			
+			-- Projetar para 2D
+			local points = {}
+			for i, corner in ipairs(corners) do
+				local pos, onScreen = Camera:WorldToViewportPoint(corner.Position)
+				points[i] = Vector2.new(pos.X, pos.Y)
+			end
+			
+			-- Calcular bounding box 2D
+			local minX, minY, maxX, maxY = math.huge, math.huge, -math.huge, -math.huge
+			for _, pt in ipairs(points) do
+				minX = math.min(minX, pt.X)
+				minY = math.min(minY, pt.Y)
+				maxX = math.max(maxX, pt.X)
+				maxY = math.max(maxY, pt.Y)
+			end
+			
+			local w, h = maxX - minX, maxY - minY
+			local cornerSize = math.min(w, h) * 0.25 -- Tamanho do canto
+			
+			local color = ESP.Color
+			local hp = hum.Health / hum.MaxHealth
 			
 			if ESP.Boxes then
-				o.Box.Size = Vector2.new(w, h)
-				o.Box.Position = Vector2.new(cx - w/2, top.Y)
-				o.Box.Color = ESP.Color
-				o.Box.Visible = true
-			else o.Box.Visible = false end
+				-- Corner Box (4 cantos, 2 linhas cada)
+				local lines = o.Lines
+				
+				-- Topo esquerdo
+				lines[1].From = Vector2.new(minX, minY)
+				lines[1].To = Vector2.new(minX + cornerSize, minY)
+				lines[2].From = Vector2.new(minX, minY)
+				lines[2].To = Vector2.new(minX, minY + cornerSize)
+				
+				-- Topo direito
+				lines[3].From = Vector2.new(maxX, minY)
+				lines[3].To = Vector2.new(maxX - cornerSize, minY)
+				lines[4].From = Vector2.new(maxX, minY)
+				lines[4].To = Vector2.new(maxX, minY + cornerSize)
+				
+				-- Baixo esquerdo
+				lines[5].From = Vector2.new(minX, maxY)
+				lines[5].To = Vector2.new(minX + cornerSize, maxY)
+				lines[6].From = Vector2.new(minX, maxY)
+				lines[6].To = Vector2.new(minX, maxY - cornerSize)
+				
+				-- Baixo direito
+				lines[7].From = Vector2.new(maxX, maxY)
+				lines[7].To = Vector2.new(maxX - cornerSize, maxY)
+				lines[8].From = Vector2.new(maxX, maxY)
+				lines[8].To = Vector2.new(maxX, maxY - cornerSize)
+				
+				for i = 1, 8 do
+					lines[i].Color = color
+					lines[i].Visible = true
+				end
+			else
+				for i = 1, 8 do o.Lines[i].Visible = false end
+			end
 			
+			-- Nome
 			if ESP.Names then
-				o.Name.Position = Vector2.new(cx, top.Y - 12)
+				o.Name.Position = Vector2.new((minX + maxX) / 2, minY - 14)
 				o.Name.Text = p.Name
-				o.Name.Color = ESP.Color
+				o.Name.Color = color
 				o.Name.Visible = true
 			else o.Name.Visible = false end
 			
+			-- Vida
 			if ESP.Health then
-				local hh = h * .8
-				local hp = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
-				o.HealthBg.Size = Vector2.new(2, hh)
-				o.HealthBg.Position = Vector2.new(cx - w/2 - 5, top.Y + (h - hh)/2)
-				o.HealthBg.Color = Color3.fromRGB(40, 40, 40)
-				o.HealthBg.Visible = true
-				o.Health.Size = Vector2.new(2, hh * hp)
-				o.Health.Position = Vector2.new(cx - w/2 - 5, top.Y + (h - hh)/2 + hh * (1 - hp))
+				o.Health.Position = Vector2.new((minX + maxX) / 2, minY - 26)
+				o.Health.Text = math.floor(hum.Health) .. " HP"
 				o.Health.Color = Color3.fromRGB(255 * (1 - hp), 255 * hp, 50)
 				o.Health.Visible = true
-			else o.Health.Visible = false o.HealthBg.Visible = false end
+			else o.Health.Visible = false end
+			
+			-- Distância
+			if ESP.Distance then
+				local dist = (hrp.Position - Camera.CFrame.Position).Magnitude
+				o.Distance.Position = Vector2.new((minX + maxX) / 2, maxY + 4)
+				o.Distance.Text = math.floor(dist) .. "m"
+				o.Distance.Color = Color3.fromRGB(200, 200, 200)
+				o.Distance.Visible = true
+			else o.Distance.Visible = false end
 		end
 	end
 end)
 
 UserInputService.InputBegan:Connect(function(i, g) if not g and not IsMobile and i.KeyCode == Enum.KeyCode.Insert then ToggleMenu() end end)
 
-print("KN HUB loaded!")
+print("KN HUB v3 loaded!")
