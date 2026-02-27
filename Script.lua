@@ -1,4 +1,4 @@
--- KN HUB - Aimbot + ESP
+-- KN HUB
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -32,67 +32,82 @@ Menu.Enabled = false
 Menu.ResetOnSpawn = false
 
 local Frame = Instance.new("Frame", Menu)
-Frame.Size = UDim2.new(0, 280, 0, 180)
-Frame.Position = UDim2.new(0.5, -140, 0.5, -90)
+Frame.Size = UDim2.new(0, 300, 0, 200)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
 Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
 Frame.Active = true
 Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 6)
 
 local Title = Instance.new("Frame", Frame)
-Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Size = UDim2.new(1, 0, 0, 32)
 Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Instance.new("UICorner", Title).CornerRadius = UDim.new(0, 6)
+Instance.new("Frame", Title).Size = UDim2.new(1, 0, 0.5, 0)
+Instance.new("Frame", Title).Position = UDim2.new(0, 0, 0.5, 0)
+Instance.new("Frame", Title).BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 
-Instance.new("TextLabel", Title).Text = "KN HUB"
-Instance.new("TextLabel", Title).Size = UDim2.new(1, -40, 1, 0)
-Instance.new("TextLabel", Title).Position = UDim2.new(0, 10, 0, 0)
-Instance.new("TextLabel", Title).BackgroundTransparency = 1
-Instance.new("TextLabel", Title).TextColor3 = Theme
-Instance.new("TextLabel", Title).Font = Enum.Font.GothamBold
-Instance.new("TextLabel", Title).TextSize = 12
-Instance.new("TextLabel", Title).TextXAlignment = Enum.TextXAlignment.Left
+local TitleText = Instance.new("TextLabel", Title)
+TitleText.Text = "KN HUB"
+TitleText.Size = UDim2.new(1, -50, 1, 0)
+TitleText.Position = UDim2.new(0, 10, 0, 0)
+TitleText.BackgroundTransparency = 1
+TitleText.TextColor3 = Theme
+TitleText.Font = Enum.Font.GothamBold
+TitleText.TextSize = 13
+TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 local Close = Instance.new("TextButton", Title)
-Close.Size = UDim2.new(0, 20, 0, 20)
-Close.Position = UDim2.new(1, -25, 0.5, -10)
+Close.Size = UDim2.new(0, 22, 0, 22)
+Close.Position = UDim2.new(1, -28, 0.5, -11)
 Close.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 Close.Text = "×"
 Close.TextColor3 = Color3.new(1, 1, 1)
 Close.Font = Enum.Font.GothamBold
+Close.TextSize = 14
 Instance.new("UICorner", Close).CornerRadius = UDim.new(0, 4)
 
-local Content = Instance.new("ScrollingFrame", Frame)
-Content.Size = UDim2.new(1, -10, 1, -35)
-Content.Position = UDim2.new(0, 5, 0, 32)
-Content.BackgroundTransparency = 1
-Content.ScrollBarThickness = 3
-Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
-Instance.new("UIListLayout", Content).Padding = UDim.new(0, 4)
+local Content = Instance.new("Frame", Frame)
+Content.Size = UDim2.new(1, -10, 1, -38)
+Content.Position = UDim2.new(0, 5, 0, 33)
+Content.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 4)
 
--- Toggle creator
+local Scroll = Instance.new("ScrollingFrame", Content)
+Scroll.Size = UDim2.new(1, -10, 1, -10)
+Scroll.Position = UDim2.new(0, 5, 0, 5)
+Scroll.BackgroundTransparency = 1
+Scroll.ScrollBarThickness = 4
+Scroll.ScrollBarImageColor3 = Theme
+Scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Instance.new("UIListLayout", Scroll).Padding = UDim.new(0, 5)
+
+-- Toggle
 local function Toggle(text, default, callback)
-	local f = Instance.new("Frame", Content)
-	f.Size = UDim2.new(1, 0, 0, 32)
+	local f = Instance.new("Frame", Scroll)
+	f.Size = UDim2.new(1, 0, 0, 36)
 	f.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 3)
 	
-	Instance.new("TextLabel", f).Text = text
-	Instance.new("TextLabel", f).Size = UDim2.new(1, -50, 1, 0)
-	Instance.new("TextLabel", f).Position = UDim2.new(0, 8, 0, 0)
-	Instance.new("TextLabel", f).BackgroundTransparency = 1
-	Instance.new("TextLabel", f).TextColor3 = Color3.new(1, 1, 1)
-	Instance.new("TextLabel", f).Font = Enum.Font.Gotham
-	Instance.new("TextLabel", f).TextSize = 11
-	Instance.new("TextLabel", f).TextXAlignment = Enum.TextXAlignment.Left
+	local l = Instance.new("TextLabel", f)
+	l.Text = text
+	l.Size = UDim2.new(1, -60, 1, 0)
+	l.Position = UDim2.new(0, 10, 0, 0)
+	l.BackgroundTransparency = 1
+	l.TextColor3 = Color3.new(1, 1, 1)
+	l.Font = Enum.Font.Gotham
+	l.TextSize = 12
+	l.TextXAlignment = Enum.TextXAlignment.Left
 	
 	local b = Instance.new("TextButton", f)
-	b.Size = UDim2.new(0, 36, 0, 18)
-	b.Position = UDim2.new(1, -42, 0.5, -9)
+	b.Size = UDim2.new(0, 40, 0, 20)
+	b.Position = UDim2.new(1, -50, 0.5, -10)
 	b.BackgroundColor3 = default and Theme or Color3.fromRGB(50, 50, 50)
 	b.Text = default and "ON" or "OFF"
 	b.TextColor3 = Color3.new(1, 1, 1)
 	b.Font = Enum.Font.GothamBold
-	b.TextSize = 9
+	b.TextSize = 10
+	b.AutoButtonColor = false
 	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 3)
 	
 	local state = default
@@ -104,63 +119,64 @@ local function Toggle(text, default, callback)
 	end)
 end
 
--- Slider creator
+-- Slider
 local function Slider(text, min, max, default, suffix, callback)
-	local f = Instance.new("Frame", Content)
-	f.Size = UDim2.new(1, 0, 0, 42)
+	local f = Instance.new("Frame", Scroll)
+	f.Size = UDim2.new(1, 0, 0, 48)
 	f.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 	Instance.new("UICorner", f).CornerRadius = UDim.new(0, 3)
 	
-	Instance.new("TextLabel", f).Text = text
-	Instance.new("TextLabel", f).Size = UDim2.new(1, -50, 0, 16)
-	Instance.new("TextLabel", f).Position = UDim2.new(0, 8, 0, 4)
-	Instance.new("TextLabel", f).BackgroundTransparency = 1
-	Instance.new("TextLabel", f).TextColor3 = Color3.new(1, 1, 1)
-	Instance.new("TextLabel", f).Font = Enum.Font.Gotham
-	Instance.new("TextLabel", f).TextSize = 10
+	local l = Instance.new("TextLabel", f)
+	l.Text = text
+	l.Size = UDim2.new(1, -55, 0, 18)
+	l.Position = UDim2.new(0, 10, 0, 5)
+	l.BackgroundTransparency = 1
+	l.TextColor3 = Color3.new(1, 1, 1)
+	l.Font = Enum.Font.Gotham
+	l.TextSize = 11
 	
-	local val = Instance.new("TextLabel", f)
-	val.Text = tostring(default) .. suffix
-	val.Size = UDim2.new(0, 40, 0, 16)
-	val.Position = UDim2.new(1, -45, 0, 4)
-	val.BackgroundTransparency = 1
-	val.TextColor3 = Theme
-	val.Font = Enum.Font.GothamBold
-	val.TextSize = 10
+	local v = Instance.new("TextLabel", f)
+	v.Text = tostring(default) .. suffix
+	v.Size = UDim2.new(0, 45, 0, 18)
+	v.Position = UDim2.new(1, -50, 0, 5)
+	v.BackgroundTransparency = 1
+	v.TextColor3 = Theme
+	v.Font = Enum.Font.GothamBold
+	v.TextSize = 11
 	
-	local track = Instance.new("Frame", f)
-	track.Size = UDim2.new(1, -16, 0, 3)
-	track.Position = UDim2.new(0, 8, 1, -10)
-	track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	Instance.new("UICorner", track).CornerRadius = UDim.new(1, 0)
+	local r = Instance.new("Frame", f)
+	r.Size = UDim2.new(1, -20, 0, 4)
+	r.Position = UDim2.new(0, 10, 1, -12)
+	r.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	Instance.new("UICorner", r).CornerRadius = UDim.new(1, 0)
 	
-	local fill = Instance.new("Frame", track)
-	fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
-	fill.BackgroundColor3 = Theme
-	Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
+	local fl = Instance.new("Frame", r)
+	fl.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+	fl.BackgroundColor3 = Theme
+	Instance.new("UICorner", fl).CornerRadius = UDim.new(1, 0)
 	
-	local knob = Instance.new("Frame", track)
-	knob.Size = UDim2.new(0, 8, 0, 8)
-	knob.Position = UDim2.new((default - min) / (max - min), -4, 0.5, -4)
-	knob.BackgroundColor3 = Color3.new(1, 1, 1)
-	Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
+	local k = Instance.new("Frame", r)
+	k.Size = UDim2.new(0, 10, 0, 10)
+	k.Position = UDim2.new((default - min) / (max - min), -5, 0.5, -5)
+	k.BackgroundColor3 = Color3.new(1, 1, 1)
+	Instance.new("UICorner", k).CornerRadius = UDim.new(1, 0)
 	
-	local dragging = false
-	local function update(input)
-		local pos = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
-		local v = math.floor(min + (pos * (max - min)))
-		fill.Size = UDim2.new(pos, 0, 1, 0)
-		knob.Position = UDim2.new(pos, -4, 0.5, -4)
-		val.Text = tostring(v) .. suffix
-		callback(v)
+	local g = false
+	local function u(input)
+		local pos = math.clamp((input.Position.X - r.AbsolutePosition.X) / r.AbsoluteSize.X, 0, 1)
+		local val = math.floor(min + (pos * (max - min)))
+		fl.Size = UDim2.new(pos, 0, 1, 0)
+		k.Position = UDim2.new(pos, -5, 0.5, -5)
+		v.Text = tostring(val) .. suffix
+		callback(val)
 	end
 	
-	track.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then dragging = true update(i) end end)
-	UserInputService.InputChanged:Connect(function(i) if dragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then update(i) end end)
-	UserInputService.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
+	r.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = true u(i) end end)
+	UserInputService.InputChanged:Connect(function(i) if g and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then u(i) end end)
+	UserInputService.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then g = false end end)
 end
 
--- Add controls
+-- Controls
 Toggle("Aimbot", false, function(v) Aimbot.Enabled = v end)
 Toggle("Team Check", true, function(v) Aimbot.TeamCheck = v end)
 Toggle("Wall Check", true, function(v) Aimbot.WallCheck = v end)
@@ -183,7 +199,7 @@ end
 Btn.MouseButton1Click:Connect(ToggleMenu)
 Close.MouseButton1Click:Connect(ToggleMenu)
 
--- Drag menu
+-- Drag
 local drag, offset = false, nil
 Title.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then drag = true offset = i.Position - Frame.AbsolutePosition end end)
 UserInputService.InputChanged:Connect(function(i) if drag and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then Frame.Position = UDim2.new(0, i.Position.X - offset.X, 0, i.Position.Y - offset.Y) end end)
@@ -196,7 +212,7 @@ Circle.Thickness = 2
 Circle.Filled = false
 Circle.NumSides = 64
 
--- ESP System
+-- ESP
 local ESPObjects = {}
 function SetupESP(p)
 	if p == LocalPlayer then return end
