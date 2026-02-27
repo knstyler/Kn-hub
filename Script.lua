@@ -10,7 +10,7 @@ local IsMobile = UserInputService.TouchEnabled and not UserInputService.Keyboard
 
 -- Configs
 local Aimbot = {Enabled = false, Smooth = 1, FOV = 250, WallCheck = true, TeamCheck = true}
-local ESP = {Enabled = false, Boxes = true, Names = true, Health = true, Color = Color3.fromRGB(255, 80, 80)}
+local ESP = {Enabled = false, Color = Color3.fromRGB(255, 80, 80)}
 local Theme = Color3.fromRGB(0, 170, 255)
 
 -- UI
@@ -32,8 +32,8 @@ Menu.Enabled = false
 Menu.ResetOnSpawn = false
 
 local Frame = Instance.new("Frame", Menu)
-Frame.Size = UDim2.new(0, 300, 0, 250)
-Frame.Position = UDim2.new(0.5, -150, 0.5, -125)
+Frame.Size = UDim2.new(0, 300, 0, 220)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -110)
 Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Frame.BorderSizePixel = 0
 Frame.Active = true
@@ -181,9 +181,6 @@ Toggle("Wall Check", true, function(v) Aimbot.WallCheck = v end)
 Slider("FOV", 50, 500, 250, "px", function(v) Aimbot.FOV = v end)
 Slider("Smooth", 1, 100, 100, "%", function(v) Aimbot.Smooth = v / 100 end)
 Toggle("ESP", false, function(v) ESP.Enabled = v end)
-Toggle("Boxes", true, function(v) ESP.Boxes = v end)
-Toggle("Names", true, function(v) ESP.Names = v end)
-Toggle("Health", true, function(v) ESP.Health = v end)
 
 -- Menu toggle
 local open = false
@@ -210,42 +207,22 @@ Circle.Thickness = 2
 Circle.Filled = false
 Circle.NumSides = 64
 
--- ESP 2D (igual da foto)
+-- ESP - Apenas caixas 2D clean (igual da foto)
 local ESPObjects = {}
 
 function SetupESP(p)
 	if p == LocalPlayer then return end
-	ESPObjects[p] = {
-		Box = Drawing.new("Square"),
-		Name = Drawing.new("Text"),
-		Health = Drawing.new("Text"),
-		Distance = Drawing.new("Text")
-	}
-	local o = ESPObjects[p]
-	o.Box.Thickness = 1.5
-	o.Box.Filled = false
-	o.Name.Size = 12
-	o.Name.Center = true
-	o.Name.Outline = true
-	o.Name.Font = 2
-	o.Health.Size = 11
-	o.Health.Center = true
-	o.Health.Outline = true
-	o.Health.Font = 2
-	o.Distance.Size = 11
-	o.Distance.Center = true
-	o.Distance.Outline = true
-	o.Distance.Font = 2
+	ESPObjects[p] = Drawing.new("Square")
+	ESPObjects[p].Thickness = 1.2
+	ESPObjects[p].Filled = false
+	ESPObjects[p].Transparency = 1
 end
 
 for _, p in pairs(Players:GetPlayers()) do SetupESP(p) end
 Players.PlayerAdded:Connect(SetupESP)
 Players.PlayerRemoving:Connect(function(p)
 	if ESPObjects[p] then
-		ESPObjects[p].Box:Remove()
-		ESPObjects[p].Name:Remove()
-		ESPObjects[p].Health:Remove()
-		ESPObjects[p].Distance:Remove()
+		ESPObjects[p]:Remove()
 		ESPObjects[p] = nil
 	end
 end)
@@ -294,86 +271,41 @@ RunService.RenderStepped:Connect(function()
 		Camera.CFrame = CFrame.new(Camera.CFrame.Position, head.Position + (vel * math.clamp(d / 100, 0.1, 0.5) * 0.1))
 	end
 	
-	for p, o in pairs(ESPObjects) do
+	for p, box in pairs(ESPObjects) do
+		-- Só inimigos
 		if p.Team == LocalPlayer.Team then 
-			o.Box.Visible = false
-			o.Name.Visible = false
-			o.Health.Visible = false
-			o.Distance.Visible = false
+			box.Visible = false
 			continue 
 		end
 		
-		if not ESP.Enabled or not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") then
-			o.Box.Visible = false
-			o.Name.Visible = false
-			o.Health.Visible = false
-			o.Distance.Visible = false
+		if not ESP.Enabled or not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") or not p.Character:FindFirstChild("Head") then
+			box.Visible = false
 		else
-			local hrp, head, hum = p.Character.HumanoidRootPart, p.Character:FindFirstChild("Head"), p.Character:FindFirstChild("Humanoid")
-			if not head or not hum then
-				o.Box.Visible = false
-				o.Name.Visible = false
-				o.Health.Visible = false
-				o.Distance.Visible = false
+			local hrp = p.Character.HumanoidRootPart
+			local head = p.Character.Head
+			local hum = p.Character:FindFirstChild("Humanoid")
+			
+			if not hum or hum.Health <= 0 then
+				box.Visible = false
 				continue
 			end
 			
-			-- Posições 2D na tela
+			-- Calcular box 2D na tela
 			local headPos = Camera:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
 			local footPos = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
 			
 			if not headPos.Z then
-				o.Box.Visible = false
-				o.Name.Visible = false
-				o.Health.Visible = false
-				o.Distance.Visible = false
+				box.Visible = false
 				continue
 			end
 			
 			local h = math.abs(footPos.Y - headPos.Y)
 			local w = h * 0.5
-			local x = headPos.X - w / 2
-			local y = headPos.Y
 			
-			local color = ESP.Color
-			local hp = hum.Health / hum.MaxHealth
-			local dist = (hrp.Position - Camera.CFrame.Position).Magnitude
-			
-			-- Box 2D (igual da foto)
-			if ESP.Boxes then
-				o.Box.Size = Vector2.new(w, h)
-				o.Box.Position = Vector2.new(x, y)
-				o.Box.Color = color
-				o.Box.Visible = true
-			else
-				o.Box.Visible = false
-			end
-			
-			-- Nome (vermelho, em cima)
-			if ESP.Names then
-				o.Name.Position = Vector2.new(headPos.X, y - 15)
-				o.Name.Text = p.Name
-				o.Name.Color = color
-				o.Name.Visible = true
-			else
-				o.Name.Visible = false
-			end
-			
-			-- HP (verde se cheio, vermelho se vazio)
-			if ESP.Health then
-				o.Health.Position = Vector2.new(headPos.X, y - 28)
-				o.Health.Text = math.floor(hum.Health) .. " HP"
-				o.Health.Color = Color3.fromRGB(255 * (1 - hp), 255 * hp, 0)
-				o.Health.Visible = true
-			else
-				o.Health.Visible = false
-			end
-			
-			-- Distância (cinza, embaixo)
-			o.Distance.Position = Vector2.new(headPos.X, footPos.Y + 5)
-			o.Distance.Text = math.floor(dist) .. "m"
-			o.Distance.Color = Color3.fromRGB(200, 200, 200)
-			o.Distance.Visible = true
+			box.Size = Vector2.new(w, h)
+			box.Position = Vector2.new(headPos.X - w/2, headPos.Y)
+			box.Color = ESP.Color
+			box.Visible = true
 		end
 	end
 end)
